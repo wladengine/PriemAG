@@ -1,0 +1,245 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{22507CF6-6DA4-4653-A175-D69DBA162711}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Priem</RootNamespace>
+    <AssemblyName>Priem_AG</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>
+    </SccProjectName>
+    <SccLocalPath>
+    </SccLocalPath>
+    <SccAuxPath>
+    </SccAuxPath>
+    <SccProvider>
+    </SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Shwz-Disney-Timon.ico</ApplicationIcon>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>Priem.Program</StartupObject>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="BDClassLib">
+      <HintPath>..\..\_Shared libs\PriemLib\PriemLib\bin\Debug\BDClassLib.dll</HintPath>
+    </Reference>
+    <Reference Include="EducServLib">
+      <HintPath>..\..\_Shared libs\EducServLib\EducServLib\bin\Debug\EducServLib.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="itextsharp">
+      <HintPath>..\..\_Shared libs\PriemLib\PriemLib\bin\Debug\itextsharp.dll</HintPath>
+    </Reference>
+    <Reference Include="RtfWriter">
+      <HintPath>..\..\_Shared libs\PriemLib\PriemLib\bin\Debug\RtfWriter.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.DirectoryServices.AccountManagement" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Transactions" />
+    <Reference Include="System.Windows.Forms.DataVisualization" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="WordOut">
+      <HintPath>..\..\_Shared libs\WordOut.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ChangeAbitClass.cs" />
+    <Compile Include="Crypto\ExamsVedCard.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Crypto\ExamsVedList.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Crypto\ExamsVedList.designer.cs">
+      <DependentUpon>ExamsVedList.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Crypto\SelectExamCrypto.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Exams\Olymp2Mark.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Exams\Olymp2Mark.designer.cs">
+      <DependentUpon>Olymp2Mark.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ExportClass.cs" />
+    <Compile Include="Lists\AllAbitList.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Lists\AllAbitList.designer.cs">
+      <DependentUpon>AllAbitList.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Lists\ListHostel.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Lists\ListHostel.designer.cs">
+      <DependentUpon>ListHostel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Lists\OlympAbitList.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Lists\OlympAbitList.designer.cs">
+      <DependentUpon>OlympAbitList.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Lists\PersonChanges.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Lists\PersonChanges.designer.cs">
+      <DependentUpon>PersonChanges.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Lists\RatingList.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Lists\RatingList.designer.cs">
+      <DependentUpon>RatingList.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Lists\VedExamLists.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Lists\VedExamLists.designer.cs">
+      <DependentUpon>VedExamLists.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MainForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MainForm.Designer.cs">
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Print.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Protocols\OrderNumbers.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Protocols\OrderNumbers.designer.cs">
+      <DependentUpon>OrderNumbers.cs</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="Crypto\ExamsVedList.resx">
+      <DependentUpon>ExamsVedList.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Exams\Olymp2Mark.resx">
+      <DependentUpon>Olymp2Mark.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Lists\AllAbitList.resx">
+      <DependentUpon>AllAbitList.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Lists\ListHostel.resx">
+      <DependentUpon>ListHostel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Lists\OlympAbitList.resx">
+      <DependentUpon>OlympAbitList.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Lists\PersonChanges.resx">
+      <DependentUpon>PersonChanges.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Lists\RatingList.resx">
+      <DependentUpon>RatingList.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Lists\VedExamLists.resx">
+      <DependentUpon>VedExamLists.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MainForm.resx">
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <EmbeddedResource Include="Protocols\OrderNumbers.resx">
+      <DependentUpon>OrderNumbers.cs</DependentUpon>
+    </EmbeddedResource>
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="packages.config" />
+    <None Include="Properties\DataSources\PriemEntities.datasource" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Magistery.ico" />
+    <Content Include="Shwz-Disney-Timon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Cards\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\2013\PriemLib\PriemLib\PriemLib.csproj">
+      <Project>{957a6e48-2cf1-4360-bbe5-d27246bc2093}</Project>
+      <Name>PriemLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\BaseFormsLib\BaseFormsLib\BaseFormsLib.csproj">
+      <Project>{264ef71d-fe21-4be1-b7eb-ccf3b5fd219f}</Project>
+      <Name>BaseFormsLib</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
