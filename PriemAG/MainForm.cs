@@ -127,7 +127,7 @@ namespace Priem
                     return;
 
                 // магистратура!
-                if (MainClass.dbType == PriemType.PriemAspirant)
+                if (MainClass.dbType == PriemType.PriemAG)
                 {
                     smiOlympAbitList.Visible = false;
                     smiOlymps.Visible = false;
@@ -136,9 +136,9 @@ namespace Priem
                 }
                 else
                 {
-                    smiOnlineChanges.Visible = false;
-                    smiLoad.Visible = false;
-                }                
+                    //smiOnlineChanges.Visible = false;
+                    //smiLoad.Visible = false;
+                }
                 
                 smiRatingList.Visible = false;
                 smiOrderNumbers.Visible = false;
