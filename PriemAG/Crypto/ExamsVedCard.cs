@@ -98,7 +98,7 @@ namespace Priem
             }
 
             if (iStudyLevelId.HasValue)
-                sQueryWhere = @" WHERE ed.qAbiturient.FacultyId = {0} AND ed.qAbiturient.StudyLevelId = {1} ";
+                sQueryWhere = @" WHERE qAbiturient.FacultyId = {0} AND qAbiturient.StudyLevelId = {1} ";
         }
     }
 }

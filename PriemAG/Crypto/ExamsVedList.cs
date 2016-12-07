@@ -56,6 +56,31 @@ namespace Priem
                 SelectExamCrypto frm = new SelectExamCrypto(this, StudyLevelGroupId.Value, FacultyId, StudyBasisId);
                 frm.Show();
             }
-        }     
+        }
+
+        protected override void btnCreateAdd_Click(object sender, EventArgs e)
+        {
+            if (MainClass.IsCrypto() || MainClass.IsOwner() || MainClass.IsPasha())
+            {
+                using (PriemEntities context = new PriemEntities())
+                {
+                    int? stBas = null;
+                    if (cbExamVed.SelectedItem.ToString().Contains("г/б"))
+                        stBas = 1;
+                    else if (cbExamVed.SelectedItem.ToString().Contains("дог"))
+                        stBas = 2;
+
+                    extExamsVed ved = (from ev in context.extExamsVed
+                                       where ev.Id == ExamsVedId
+                                       select ev).FirstOrDefault();
+
+                    DateTime passDate = ved.Date;
+                    int examId = ved.ExamId;
+
+                    SelectExamCrypto frm = new SelectExamCrypto(this, StudyLevelGroupId.Value, FacultyId, stBas, passDate, examId);
+                    frm.Show();
+                }
+            }
+        }
     }
 }

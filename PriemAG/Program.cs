@@ -19,9 +19,13 @@ namespace Priem
             //{
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
-
-                mf = new MainForm();
-                Application.Run(mf);
+                try
+                {
+                    mf = new MainForm();
+                    Application.Run(mf);
+                }
+                catch (ObjectDisposedException ex)
+                { return; }
             //}
             //catch (Exception exc)
             //{

@@ -32,35 +32,30 @@ namespace Priem
 
             _queryBody = @"SELECT DISTINCT qAbiturient.Id as Id, qAbiturient.RegNum as Рег_Номер, 
                     extPerson.PersonNum as 'Ид. номер', extPerson.FIO as ФИО, 
-                    extAbitMarksSum.TotalSum as 'Сумма баллов', extAbitMarksSum.TotalSumFiveGrade as 'Сумма баллов (5-балльная шкала)', 
-                    extAbitMarksSum.TotalCount as 'Кол-во оценок', 
+                    extAbitMarksSumAG.TotalSum as 'Сумма баллов',
+                    extAbitMarksSumAG.TotalCount as 'Кол-во оценок', 
                     case when qAbiturient.HasOriginals>0 then 'Да' else 'Нет' end as 'Подлинники документов', qAbiturient.Coefficient as 'Рейтинговый коэффициент', 
                     Competition.Name as Конкурс, 
-                    hlpAbiturientProf.ProfFiveGrade AS 'Проф. экзамен (5 баллов)', hlpAbiturientProf.Prof AS 'Проф. экзамен', 
+                    hlpAbiturientOrderNumber1.Mark AS 'Проф. экзамен', 
+                    hlpAbiturient_AG_Rus.Mark AS 'Русский язык',
                     CASE WHEN EXISTS(SELECT Id FROM ed.Olympiads WHERE OlympTypeId = 3 AND OlympValueId = 6 AND AbiturientId = qAbiturient.Id) then 1 else CASE WHEN EXISTS(SELECT Id FROM ed.Olympiads WHERE OlympTypeId = 3 AND OlympValueId = 5 AND AbiturientId = qAbiturient.Id) then 2 else CASE WHEN EXISTS(SELECT Id FROM ed.Olympiads WHERE OlympTypeId = 3 AND OlympValueId = 7 AND AbiturientId = qAbiturient.Id) then 3 else 4 end end end as olymp,
-                    CASE WHEN extPerson_EducationInfo_Current.AttestatSeries IN ('ЗА','ЗБ','ЗВ') then 1 else CASE WHEN  extPerson_EducationInfo_Current.AttestatSeries IN ('СА','СБ','СВ') then 2 else 3 end end as attestat,
                     extPerson_EducationInfo_Current.SchoolAVG as attAvg, 
                     CASE WHEN (CompetitionId=1  OR CompetitionId=8) then 1 else case when (CompetitionId=2 OR CompetitionId=7) AND extPerson.Privileges>0 then 2 else 3 end end as comp, 
-                    CASE WHEN (CompetitionId=1 OR CompetitionId=8) then ed.qAbiturient.Coefficient else 10000 end as noexamssort, 
+                    CASE WHEN (CompetitionId=1 OR CompetitionId=8) then ed.qAbiturient.Coefficient else 0 end as noexamssort, 
                     CASE WHEN (CompetitionId=5 OR CompetitionId=9) then 1 else 0 end as preimsort,
-                    case when extPerson_EducationInfo_Current.IsExcellent>0 then 'Да' else 'Нет' end as 'Медалист', 
-                    extPerson_EducationInfo_Current.AttestatSeries as 'Серия аттестата', 
-                    extPerson_EducationInfo_Current.DiplomSeries as 'Серия диплома', 
                     extPerson_EducationInfo_Current.SchoolAVG as 'Средний балл', 
-                    extPerson.Email + ', '+ extPerson.Phone + ', ' + extPerson.Mobiles AS 'Контакты',
-                    (CASE WHEN hlpEntryWithAddExams.EntryId IS NULL THEN hlpAbiturientProf.Prof ELSE hlpAbiturientProfAdd.ProfAdd END) AS DopOrProfSort"; 
+                    extPerson.Email + ', '+ extPerson.Phone + ', ' + extPerson.Mobiles AS 'Контакты'"; 
  
             _queryFrom = @" FROM ed.qAbiturient 
-                    INNER JOIN ed.extPerson ON ed.extPerson.Id = ed.qAbiturient.PersonId 
+                    INNER JOIN ed.extPerson ON ed.extPerson.Id = qAbiturient.PersonId 
                     INNER JOIN ed.extPerson_EducationInfo_Current ON extPerson_EducationInfo_Current.PersonId = extPerson.Id
                     INNER JOIN ed.Competition ON ed.Competition.Id = ed.qAbiturient.CompetitionId 
                     INNER JOIN ed.extEnableProtocol ON ed.extEnableProtocol.AbiturientId = ed.qAbiturient.Id 
                     LEFT JOIN ed.hlpEntryWithAddExams ON hlpEntryWithAddExams.EntryId = qAbiturient.EntryId
-                    LEFT JOIN ed.hlpAbiturientProfAdd ON ed.hlpAbiturientProfAdd.Id = ed.qAbiturient.Id 
-                    LEFT JOIN ed.hlpAbiturientProf ON ed.hlpAbiturientProf.Id = ed.qAbiturient.Id 
-                    LEFT JOIN ed.extAbitMarksSum ON ed.qAbiturient.Id = ed.extAbitMarksSum.Id
-                    LEFT JOIN ed.hlpMinMarkAbiturient ON hlpMinMarkAbiturient.Id = qAbiturient.Id
-                    LEFT JOIN ed.qAbiturientForeignApplicationsOnly qFor ON qAbiturient.Id = qFor.Id";
+                    LEFT JOIN ed.hlpAbiturientOrderNumber1 ON hlpAbiturientOrderNumber1.Id = ed.qAbiturient.Id 
+                    LEFT JOIN ed.hlpAbiturient_AG_Rus ON hlpAbiturient_AG_Rus.Id = qAbiturient.Id 
+                    LEFT JOIN ed.extAbitMarksSumAG ON ed.qAbiturient.Id = extAbitMarksSumAG.Id
+                    LEFT JOIN ed.hlpMinMarkAbiturient ON hlpMinMarkAbiturient.Id = qAbiturient.Id";
 
             _queryFWJoin = "";
             
@@ -461,14 +456,21 @@ namespace Priem
         public override void UpdateDataGrid()
         {
             try
-            {                
+            {   
+                //1) балл по результатам первого профильного вступительного испытания
+                //2) балл по результатам вступительного испытания по русскому языку
+                //3) наличие дипломов победителя и призера олимпиад (за исключением олимпиад, указанных в пункте 3.1 Правил приема), конкурсов, 
+                //конференций,	соответствующих вступительным испытаниям на 
+                //общеобразовательную программу, для поступления на обучение по которой поступающий подал заявление о приеме, если ему решением Приемной комиссии не была предоставлена льгота в соответствии с пунктом 3.3 Правил приема;
+                //4) балл в аттестате об основном общем образовании (для поступающих на обучение по основным образовательным программам среднего общего
+                //образования) или более высокую оценку по итогам учебного года (для поступающих на обучение по основным образовательным программам основного общего образования) по профильным предметам вступительных испытаний;
+                //5) средний балл аттестата об основном общем образовании (для поступающих на обучение по основным образовательным программам среднего общего образования) или более высокий средний балл оценок по итогам учебного года (для поступающих на обучение по основным образовательным программам основного общего образования).
+
                 string sOrderBy = string.Empty;
 
-                //sOrderBy = " ORDER BY [Сумма баллов (5-балльная шкала)] desc, [Проф. экзамен (5 баллов)] DESC , 'Проф. экзамен' desc, ed.qAbiturient.Coefficient, attAvg desc, ФИО";
-                sOrderBy = " ORDER BY [Сумма баллов (5-балльная шкала)] desc, [Проф. экзамен (5 баллов)] DESC , ed.qAbiturient.Coefficient, attAvg desc, ФИО";                    
+                sOrderBy = " ORDER BY comp, noexamssort DESC, [Сумма баллов] desc, [Проф. экзамен] DESC, [Русский язык] DESC, qAbiturient.Coefficient DESC, olymp, attAvg desc, ФИО";                    
                 
                 string totalQuery = null;
-
                 
                 plan = GetPlanValueAndCheckLock();
 
@@ -481,15 +483,15 @@ namespace Priem
 
                     string queryFix = _queryBody + _queryOrange +
                     @" FROM ed.qAbiturient                     
-                    INNER JOIN ed.extPerson ON ed.extPerson.Id = ed.qAbiturient.PersonId                    
+                    INNER JOIN ed.extPerson ON extPerson.Id = qAbiturient.PersonId                    
                     INNER JOIN ed.extPerson_EducationInfo_Current ON extPerson_EducationInfo_Current.PersonId = extPerson.Id
-                    INNER JOIN ed.Competition ON ed.Competition.Id = ed.qAbiturient.CompetitionId 
-                    INNER JOIN ed.Fixieren ON ed.Fixieren.AbiturientId=ed.qAbiturient.Id 
+                    INNER JOIN ed.Competition ON Competition.Id = qAbiturient.CompetitionId 
+                    INNER JOIN ed.Fixieren ON Fixieren.AbiturientId= qAbiturient.Id 
                     LEFT JOIN ed.hlpEntryWithAddExams ON hlpEntryWithAddExams.EntryId = qAbiturient.EntryId
-                    LEFT JOIN ed.FixierenView ON ed.Fixieren.FixierenViewId=ed.FixierenView.Id 
-                    LEFT JOIN ed.hlpAbiturientProfAdd ON ed.hlpAbiturientProfAdd.Id = ed.qAbiturient.Id 
-                    LEFT JOIN ed.hlpAbiturientProf ON ed.hlpAbiturientProf.Id = ed.qAbiturient.Id 
-                    LEFT JOIN ed.extAbitMarksSum ON ed.qAbiturient.Id = ed.extAbitMarksSum.Id";
+                    LEFT JOIN ed.FixierenView ON Fixieren.FixierenViewId = FixierenView.Id 
+                    LEFT JOIN ed.hlpAbiturientOrderNumber1 ON hlpAbiturientOrderNumber1.Id = qAbiturient.Id 
+                    LEFT JOIN ed.hlpAbiturient_AG_Rus ON hlpAbiturient_AG_Rus.Id = qAbiturient.Id 
+                    LEFT JOIN ed.extAbitMarksSumAG ON qAbiturient.Id = extAbitMarksSumAG.Id";
 
                     string whereFix = string.Format(@" WHERE ed.FixierenView.StudyLevelGroupId = {10} AND ed.FixierenView.StudyFormId={0} AND ed.FixierenView.StudyBasisId={1} AND ed.FixierenView.FacultyId={2} 
                                                     AND ed.FixierenView.LicenseProgramId={3} AND ed.FixierenView.ObrazProgramId={4} {5} AND ed.FixierenView.IsCel = {6}
@@ -514,42 +516,19 @@ namespace Priem
                                         
                     //не забрали доки
                     sFilters += " AND qAbiturient.BackDoc = 0 ";
-
                     sFilters += " AND qAbiturient.IsForeign = 0 ";
-
                     sFilters += " AND qAbiturient.Id NOT IN (select abiturientid from ed.extentryview) ";                    
                       
                     // кроме бэ преодолены мин планки                       
                     sFilters += " AND ((CompetitionId=1  OR CompetitionId=8) OR hlpMinMarkAbiturient.Id IS NULL)";                    
 
-                    string examsCnt = _bdc.GetStringValue(string.Format(" SELECT Count(Id) FROM ed.extExamInEntry WHERE EntryId='{0}' AND ParentExamInEntryId IS NULL", EntryId.ToString()));
-                   
-                    if (MainClass.dbType == PriemType.PriemAspirant)
-                    { 
-                        _queryOrange = @", CASE WHEN EXISTS(SELECT PersonId FROM ed.hlpPersonsWithOriginals WHERE PersonId = ed.qAbiturient.PersonId AND EntryId <> ed.qAbiturient.EntryId) then 1 else 0 end as orange ";
+                    _queryOrange = @", CASE WHEN EXISTS(SELECT PersonId FROM ed.hlpPersonsWithOriginals WHERE PersonId = ed.qAbiturient.PersonId AND EntryId <> ed.qAbiturient.EntryId) then 1 else 0 end as orange ";
                         
-                        // кроме бэ нужное кол-во оценок есть
-                        sFilters += " AND ((CompetitionId=1  OR CompetitionId=8) OR ed.extAbitMarksSum.TotalCount = " + examsCnt + " ) ";
+                    //// кроме бэ нужное кол-во оценок есть
+                    //string examsCnt = _bdc.GetStringValue(string.Format(" SELECT Count(Id) FROM ed.extExamInEntry WHERE EntryId='{0}' AND ParentExamInEntryBlockId IS NULL", EntryId.ToString()));
+                    sFilters += " AND ((CompetitionId=1 OR CompetitionId=8) OR extAbitMarksSumAG.TotalCount > 0)";
 
-                        totalQuery = _queryBody + _queryOrange + _queryFrom + sFilters + sOrderBy;
-                    }
-                    else
-                    {
-                        _queryOrange = @", CASE WHEN EXISTS(SELECT ed.extEntryView.Id FROM ed.extEntryView INNER JOIN ed.Abiturient a ON ed.extEntryView.AbiturientId = a.Id WHERE a.PersonId = ed.qAbiturient.PersonId) then 1 else 0 end as orange ";
-                        
-                        //if(StudyBasisId == 1)
-                        //    sFilters += " AND qAbiturient.Id NOT IN (SELECT AbiturientId FROM ed._FirstWaveGreenBackUp2)"; 
-
-                        sFilters += " AND ed.qAbiturient.CompetitionId NOT IN (6, 1, 2, 7) ";                                        
-
-                        // кроме бэ и тех, у кого нет сертификатов и оценок нужное кол-во оценок есть
-                        sFilters += @" AND ((CompetitionId=1  OR CompetitionId=8) 
-                                        OR (ed.qAbiturient.PersonId NOT IN (SELECT PersonId FROM ed.EgeCertificate) 
-                                           AND ed.qAbiturient.Id NOT IN (SELECT abiturientid from ed.Mark where IsFromEge = 1) and ed.extPerson.EgeInSPbgu = 0 and ed.qAbiturient.IsSecond = 0 and ed.qAbiturient.IsReduced = 0 and ed.qAbiturient.IsParallel = 0) 
-                                        OR ed.extAbitMarksSum.TotalCount = " + examsCnt + " ) ";
-
-                        totalQuery = _queryBody + (chbWithOlymps.Checked ? _queryOlymps : "") + _queryOrange + _queryFrom + sFilters + sOrderBy;
-                    }                    
+                    totalQuery = _queryBody + _queryOrange + _queryFrom + sFilters + sOrderBy;
                 }
 
                 if (!dgvAbits.Columns.Contains("Number"))
@@ -562,19 +541,9 @@ namespace Priem
                 dgvAbits.Columns["noexamssort"].Visible = false;
                 dgvAbits.Columns["preimsort"].Visible = false;
                 dgvAbits.Columns["olymp"].Visible = false;
-                dgvAbits.Columns["attestat"].Visible = false;
                 dgvAbits.Columns["attAvg"].Visible = false;
-                dgvAbits.Columns["DopOrProfSort"].Visible = false;
                 dgvAbits.Columns["orange"].Visible = false;
 
-                if (MainClass.dbType == PriemType.PriemAspirant)
-                {
-                    dgvAbits.Columns["Серия аттестата"].Visible = false;
-                    dgvAbits.Columns["Медалист"].HeaderText = "Красный диплом";
-                }
-                else
-                    dgvAbits.Columns["Серия диплома"].Visible = false;
-                
                 foreach (DataGridViewColumn column in dgvAbits.Columns)
                 {
                     column.SortMode = DataGridViewColumnSortMode.NotSortable;

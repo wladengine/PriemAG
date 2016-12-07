@@ -42,6 +42,7 @@
             this.smiListHostel = new System.Windows.Forms.ToolStripMenuItem();
             this.smiRatingList = new System.Windows.Forms.ToolStripMenuItem();
             this.smiOlympCheckList = new System.Windows.Forms.ToolStripMenuItem();
+            this.smiExamRegList = new System.Windows.Forms.ToolStripMenuItem();
             this.smiProtocols = new System.Windows.Forms.ToolStripMenuItem();
             this.smiEnableProtocol = new System.Windows.Forms.ToolStripMenuItem();
             this.smiDisEnableProtocol = new System.Windows.Forms.ToolStripMenuItem();
@@ -102,6 +103,7 @@
             this.smiDeleteDog = new System.Windows.Forms.ToolStripMenuItem();
             this.smiReSetMarksForPaid = new System.Windows.Forms.ToolStripMenuItem();
             this.smiADAccounts = new System.Windows.Forms.ToolStripMenuItem();
+            this.smiSyncronizeOnlineAndWorkBase_EnableProtocol = new System.Windows.Forms.ToolStripMenuItem();
             this.smiCrypto = new System.Windows.Forms.ToolStripMenuItem();
             this.smiEnterMarks = new System.Windows.Forms.ToolStripMenuItem();
             this.smiLoadMarks = new System.Windows.Forms.ToolStripMenuItem();
@@ -117,7 +119,8 @@
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.lblDBPath = new System.Windows.Forms.ToolStripStatusLabel();
             this.tsslMain = new System.Windows.Forms.ToolStripStatusLabel();
-            this.smiExamRegList = new System.Windows.Forms.ToolStripMenuItem();
+            this.оГЭToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.smiLoadAG_OGE = new System.Windows.Forms.ToolStripMenuItem();
             this.msMainMenu.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -238,6 +241,13 @@
             this.smiOlympCheckList.Size = new System.Drawing.Size(402, 22);
             this.smiOlympCheckList.Text = "Список непроверенных дипломов олимпиад";
             this.smiOlympCheckList.Click += new System.EventHandler(this.smiOlympCheckList_Click);
+            // 
+            // smiExamRegList
+            // 
+            this.smiExamRegList.Name = "smiExamRegList";
+            this.smiExamRegList.Size = new System.Drawing.Size(402, 22);
+            this.smiExamRegList.Text = "Регистрация на экзамен";
+            this.smiExamRegList.Click += new System.EventHandler(this.smiExamRegList_Click);
             // 
             // smiProtocols
             // 
@@ -599,7 +609,8 @@
             this.smiMakeBackDoc,
             this.smiDeleteDog,
             this.smiReSetMarksForPaid,
-            this.smiADAccounts});
+            this.smiADAccounts,
+            this.smiSyncronizeOnlineAndWorkBase_EnableProtocol});
             this.smiBooks.Name = "smiBooks";
             this.smiBooks.Size = new System.Drawing.Size(152, 20);
             this.smiBooks.Text = "Справочники для Паши";
@@ -716,6 +727,13 @@
             this.smiADAccounts.Text = "Загрузка аккаунтов";
             this.smiADAccounts.Click += new System.EventHandler(this.smiADAccounts_Click);
             // 
+            // smiSyncronizeOnlineAndWorkBase_EnableProtocol
+            // 
+            this.smiSyncronizeOnlineAndWorkBase_EnableProtocol.Name = "smiSyncronizeOnlineAndWorkBase_EnableProtocol";
+            this.smiSyncronizeOnlineAndWorkBase_EnableProtocol.Size = new System.Drawing.Size(453, 22);
+            this.smiSyncronizeOnlineAndWorkBase_EnableProtocol.Text = "Синхронизировать онлайн и рабочую базу (протоколы о допуске)";
+            this.smiSyncronizeOnlineAndWorkBase_EnableProtocol.Click += new System.EventHandler(this.smiSyncronizeOnlineAndWorkBase_EnableProtocol_Click);
+            // 
             // smiCrypto
             // 
             this.smiCrypto.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -789,7 +807,8 @@
             // 
             this.smiImport.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.срюбаллToolStripMenuItem,
-            this.оплатаДоговоровToolStripMenuItem});
+            this.оплатаДоговоровToolStripMenuItem,
+            this.оГЭToolStripMenuItem});
             this.smiImport.Name = "smiImport";
             this.smiImport.Size = new System.Drawing.Size(67, 20);
             this.smiImport.Text = "Загрузка";
@@ -827,12 +846,20 @@
             this.tsslMain.Name = "tsslMain";
             this.tsslMain.Size = new System.Drawing.Size(0, 17);
             // 
-            // smiExamRegList
+            // оГЭToolStripMenuItem
             // 
-            this.smiExamRegList.Name = "smiExamRegList";
-            this.smiExamRegList.Size = new System.Drawing.Size(402, 22);
-            this.smiExamRegList.Text = "Регистрация на экзамен";
-            this.smiExamRegList.Click += new System.EventHandler(this.smiExamRegList_Click);
+            this.оГЭToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.smiLoadAG_OGE});
+            this.оГЭToolStripMenuItem.Name = "оГЭToolStripMenuItem";
+            this.оГЭToolStripMenuItem.Size = new System.Drawing.Size(175, 22);
+            this.оГЭToolStripMenuItem.Text = "ОГЭ";
+            // 
+            // smiLoadAG_OGE
+            // 
+            this.smiLoadAG_OGE.Name = "smiLoadAG_OGE";
+            this.smiLoadAG_OGE.Size = new System.Drawing.Size(183, 22);
+            this.smiLoadAG_OGE.Text = "ОГЭ по русскому яз";
+            this.smiLoadAG_OGE.Click += new System.EventHandler(this.smiLoadAG_OGE_Click);
             // 
             // MainForm
             // 
@@ -946,6 +973,9 @@
         private System.Windows.Forms.ToolStripMenuItem smiReSetMarksForPaid;
         private System.Windows.Forms.ToolStripMenuItem smiADAccounts;
         private System.Windows.Forms.ToolStripMenuItem smiExamRegList;
+        private System.Windows.Forms.ToolStripMenuItem smiSyncronizeOnlineAndWorkBase_EnableProtocol;
+        private System.Windows.Forms.ToolStripMenuItem оГЭToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem smiLoadAG_OGE;
 
     }
 }
