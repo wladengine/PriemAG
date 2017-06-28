@@ -284,7 +284,7 @@ namespace Priem
                     return;
                 }
 
-                var ent = MainClass.GetEntry(context).Where(c => c.FacultyId == FacultyId).Where(c => c.ProfileId != null).Where(c => c.StudyLevelGroupId == StudyLevelGroupId);
+                var ent = MainClass.GetEntry(context).Where(c => c.FacultyId == FacultyId).Where(c => c.StudyLevelGroupId == StudyLevelGroupId);
 
                 ent = ent.Where(c => c.IsSecond == IsSecond && c.IsReduced == IsReduced && c.IsParallel == IsParallel);
 
@@ -420,7 +420,7 @@ namespace Priem
                                     && fv.IsReduced == IsReduced && fv.IsParallel == IsParallel && fv.IsSecond == IsSecond
                                     && fv.FacultyId == FacultyId && fv.LicenseProgramId == LicenseProgramId
                                     && fv.ObrazProgramId == ObrazProgramId
-                                    && (ProfileId == null ? fv.ProfileId == null : fv.ProfileId == ProfileId)
+                                    && (ProfileId == null ? true : fv.ProfileId == ProfileId)
                                     && fv.StudyFormId == StudyFormId
                                     && fv.StudyBasisId == StudyBasisId
                                     && fv.IsCel == IsCel
@@ -654,7 +654,7 @@ namespace Priem
                                            && fv.IsReduced == IsReduced && fv.IsParallel == IsParallel && fv.IsSecond == IsSecond
                                            && fv.FacultyId == FacultyId && fv.LicenseProgramId == LicenseProgramId
                                            && fv.ObrazProgramId == ObrazProgramId
-                                           && (ProfileId == null ? fv.ProfileId == null : fv.ProfileId == ProfileId)
+                                           && (ProfileId == null ? true : fv.ProfileId == ProfileId)
                                            && fv.StudyFormId == StudyFormId
                                            && fv.StudyBasisId == StudyBasisId
                                            && fv.IsCel == IsCel
@@ -861,7 +861,7 @@ namespace Priem
                              where fv.StudyLevelGroupId == StudyLevelGroupId && fv.IsReduced == IsReduced && fv.IsParallel == IsParallel && fv.IsSecond == IsSecond
                              && fv.FacultyId == FacultyId && fv.LicenseProgramId == LicenseProgramId
                              && fv.ObrazProgramId == ObrazProgramId
-                             && (ProfileId == null ? fv.ProfileId == null : fv.ProfileId == ProfileId)
+                             && (ProfileId == null ? true : fv.ProfileId == ProfileId)
                              && fv.StudyFormId == StudyFormId
                              && fv.StudyBasisId == StudyBasisId
                              && fv.IsCel == IsCel
@@ -873,7 +873,7 @@ namespace Priem
                              where fv.StudyLevelGroupId == StudyLevelGroupId && fv.IsReduced == IsReduced && fv.IsParallel == IsParallel && fv.IsSecond == IsSecond
                              && fv.FacultyId == FacultyId && fv.LicenseProgramId == LicenseProgramId
                              && fv.ObrazProgramId == ObrazProgramId
-                             && (ProfileId == null ? fv.ProfileId == null : fv.ProfileId == ProfileId)
+                             && (ProfileId == null ? true : fv.ProfileId == ProfileId)
                              && fv.StudyFormId == StudyFormId
                              && fv.StudyBasisId == StudyBasisId
                              && fv.IsCrimea == IsCrimea
@@ -922,7 +922,7 @@ namespace Priem
                                      where fv.StudyLevelGroupId == StudyLevelGroupId && fv.IsReduced == IsReduced && fv.IsParallel == IsParallel && fv.IsSecond == IsSecond
                                      && fv.FacultyId == FacultyId && fv.LicenseProgramId == LicenseProgramId
                                      && fv.ObrazProgramId == ObrazProgramId
-                                     && (ProfileId == null ? fv.ProfileId == null : fv.ProfileId == ProfileId)
+                                     && (ProfileId == null ? true : fv.ProfileId == ProfileId)
                                      && fv.StudyFormId == StudyFormId
                                      && fv.StudyBasisId == StudyBasisId
                                      select fv.Id).FirstOrDefault();

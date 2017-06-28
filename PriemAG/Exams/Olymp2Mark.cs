@@ -439,38 +439,41 @@ namespace Priem
         //сбор фильтров 
         private string GetQuery()
         {
-            string sQuery = @"SELECT extOlympiads.Id AS OlympiadId, ed.qAbiturient.Id as Id, ed.qAbiturient.RegNum as Рег_Номер, ed.extPersonAspirant.FIO as ФИО, 
-                        ed.Competition.Name as Тип_конкурса, OlympTypeName as Вид, OlympName AS Название, OlympLevelName AS Уровень, OlympSubjectName as Предмет,
-                        OlympValueName as Степень, ed.extExamInEntry.Id AS ExamInEntryId 
-                        FROM ed.qAbiturient LEFT JOIN ed.extPersonAspirant ON ed.qAbiturient.PersonId = ed.extPersonAspirant.Id INNER JOIN ed.extOlympiads ON ed.extOlympiads.AbiturientId = ed.qAbiturient.Id 
-                        LEFT JOIN ed.Competition ON ed.Competition.Id = ed.qAbiturient.CompetitionId 
-                        INNER JOIN ed.extExamInEntry ON qAbiturient.EntryId = ed.extExamInEntry.EntryId ";
+            string sQuery =
+@"SELECT extOlympiads.Id AS OlympiadId, qAbiturient.Id as Id, qAbiturient.RegNum as Рег_Номер, extPerson.FIO as ФИО, 
+Competition.Name as Тип_конкурса, OlympTypeName as Вид, OlympName AS Название, OlympLevelName AS Уровень, OlympSubjectName as Предмет,
+OlympValueName as Степень, extExamInEntry.Id AS ExamInEntryId 
+FROM ed.qAbiturient
+INNER JOIN ed.extPerson ON qAbiturient.PersonId = extPerson.Id
+INNER JOIN ed.extOlympiads ON extOlympiads.PersonId = extPerson.Id
+INNER JOIN ed.extExamInEntry ON qAbiturient.EntryId = extExamInEntry.EntryId
+LEFT JOIN ed.Competition ON Competition.Id = qAbiturient.CompetitionId";
 
-            sQuery += " WHERE ed.qAbiturient.BackDoc=0 " + GetFilters();
-            sQuery += string.Format(" AND ed.extExamInEntry.ExamId = {0}", ExamId);
+            sQuery += " WHERE qAbiturient.BackDoc=0 " + GetFilters();
+            sQuery += string.Format(" AND extExamInEntry.ExamId = {0}", ExamId);
             //sQuery += string.Format(" AND NOT Exists (Select qMark.id FROM qMark INNER JOIN qAbiturient as abit ON abit.Id=qMark.AbiturientId INNER JOIN extExamInProgram ON qMark.ExamInProgramId = extExamInProgram.Id WHERE abit.id=qAbiturient.Id AND extExamInProgram.ProgramId = qAbiturient.ProgramId AND extExamInProgram.ExamNameId={0} ANd qMark.IsFromOlymp = 1) ", cbExams.Id);
-            sQuery += " AND NOT Exists (SELECT ed.qMark.Id FROM ed.qMark INNER JOIN ed.qAbiturient as abit ON abit.Id=ed.qMark.AbiturientId WHERE abit.id=ed.qAbiturient.Id AND ed.extExamInEntry.Id = ed.qMark.ExamInEntryBlockUnitId AND ed.qMark.IsFromOlymp = 1)";
+            sQuery += " AND NOT Exists (SELECT Mark.Id FROM ed.Mark INNER JOIN ed.qAbiturient as abit ON abit.Id=Mark.AbiturientId WHERE abit.id=qAbiturient.Id AND extExamInEntry.Id = Mark.ExamInEntryBlockUnitId AND Mark.IsFromOlymp = 1)";
             string sOl = string.Empty;
 
             //обработали вид            
             if (OlympTypeId != null)
-                sOl += " AND ed.extOlympiads.OlympTypeId = " + OlympTypeId;
+                sOl += " AND extOlympiads.OlympTypeId = " + OlympTypeId;
 
             //обработали уровень            
             if (OlympLevelId != null)
-                sOl += " AND ed.extOlympiads.OlympLevelId = " + OlympLevelId;
+                sOl += " AND extOlympiads.OlympLevelId = " + OlympLevelId;
 
             //обработали предмет            
             if (OlympSubjectId != null)
-                sOl += " AND ed.extOlympiads.OlympSubjectId = " + OlympSubjectId;
+                sOl += " AND extOlympiads.OlympSubjectId = " + OlympSubjectId;
 
             //обработали значение            
             if (OlympValueId != null)
-                sOl += " AND ed.extOlympiads.OlympValueId  = " + OlympValueId;
+                sOl += " AND extOlympiads.OlympValueId  = " + OlympValueId;
 
             //обработали название            
             if (OlympNameId != null)
-                sOl += " AND ed.extOlympiads.OlympNameId  = " + OlympNameId;
+                sOl += " AND extOlympiads.OlympNameId  = " + OlympNameId;
 
             sQuery += sOl;
 
@@ -589,7 +592,7 @@ namespace Priem
             if (ObrazProgramId != null)
                 s1 += " AND ed.extAbitAspirant.ObrazProgramId = " + ObrazProgramId;
 
-            string query = string.Format(@"SELECT ed.extPersonAspirant.PersonNum AS PerNum, ed.extAbitAspirant.RegNum,  LicenseProgramName, ObrazProgramName, 
+            string query = string.Format(@"SELECT ed.extPerson.PersonNum AS PerNum, ed.extAbitAspirant.RegNum,  LicenseProgramName, ObrazProgramName, 
                     StudyFormName, ed.extAbitAspirant.FIO as fio, ed.qMark.Value as markval 
                     FROM ed.extAbitAspirant INNER JOIN ed.qMark ON ed.qMark.AbiturientId = ed.extAbitAspirant.Id 
                     INNER JOIN ed.extExamInEntry ON ed.qMark.ExamInEntryBlockUnitId = ed.extExamInEntry.Id 

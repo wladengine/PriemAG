@@ -111,7 +111,7 @@ namespace Priem
                 string currPath = Application.StartupPath;
 
                 bool bIsDev = false;
-                if (currPath.IndexOf(@"D:\Projects\2013 - MainPriem\Priem\Priem\bin\Release", StringComparison.OrdinalIgnoreCase) == 0)
+                if (currPath.IndexOf(@"\bin\", StringComparison.OrdinalIgnoreCase) >= 0)
                     bIsDev = true;
 
                 string AppType_Postfix = "";
@@ -269,15 +269,7 @@ namespace Priem
                 // магистратура!
                 if (MainClass.dbType == PriemType.PriemAG)
                 {
-                    smiOlympAbitList.Visible = false;
-                    smiOlymps.Visible = false;
                     smiOlymp2Competition.Visible = false;
-                    smiOlymp2Mark.Visible = false;
-                }
-                else
-                {
-                    //smiOnlineChanges.Visible = false;
-                    //smiLoad.Visible = false;
                 }
                 
                 smiRatingList.Visible = false;
@@ -636,7 +628,7 @@ namespace Priem
 
         private void smiOlymp2Mark_Click(object sender, EventArgs e)
         {
-            new Olymp2Mark().Show();
+            new Priem.Olymp2Mark().Show();
         }
 
         private void smiOlymp2Competition_Click(object sender, EventArgs e)
