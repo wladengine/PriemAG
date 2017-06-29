@@ -335,14 +335,31 @@ where ed.extentryview.studyformid=1 and ed.extentryview.studybasisid=1 and ed.ex
 
                     var intersected = abitsPlat.Intersect(abitsBudz).Distinct();
 
-                    var AbitsToWork = context.Abiturient.Where(x => intersected.Contains(x.PersonId));
+                    var AbitsToWork =
+                        (from Abits in context.Abiturient
+                         join Pers in context.extPerson on Abits.PersonId equals Pers.Id
+                         join Ent in context.extEntry on Abits.EntryId equals Ent.Id
+                         where intersected.Contains(Abits.PersonId)
+                         select new
+                         {
+                             Abits.Id,
+                             Abits.PersonId,
+                             Abits.EntryId,
+                             Pers.FIO,
+                             Ent.LicenseProgramId,
+                             Ent.ObrazProgramId,
+                             Ent.StudyFormId,
+                             Ent.LicenseProgramCode,
+                             Ent.LicenseProgramName,
+                             Ent.ObrazProgramName
+                         });
                     foreach (var Ab in AbitsToWork)
                     {
-                        var AbitB = context.Abiturient.Where(x => x.Entry.StudyLevelId == 15 && x.Entry.StudyBasisId == 1 && x.Entry.StudyFormId == Ab.Entry.StudyFormId && x.PersonId == Ab.PersonId
-                            && x.Entry.LicenseProgramId == Ab.Entry.LicenseProgramId && x.Entry.ObrazProgramId == x.Entry.ObrazProgramId);
+                        var AbitB = context.Abiturient.Where(x => x.Entry.StudyLevelId == 15 && x.Entry.StudyBasisId == 1 && x.Entry.StudyFormId == Ab.StudyFormId && x.PersonId == Ab.PersonId
+                            && x.Entry.LicenseProgramId == Ab.LicenseProgramId && x.Entry.ObrazProgramId == Ab.ObrazProgramId);
                         if (AbitB.Count() > 1)
                         {
-                            WinFormsServ.Error(Ab.Person.Surname + " " + (Ab.Person.Name ?? "") + " " + (Ab.Person.SecondName ?? "") + " - совпадения для " + Ab.Entry.SP_LicenseProgram.Code + " " + Ab.Entry.SP_LicenseProgram.Name + " " + Ab.Entry.SP_ObrazProgram.Name);
+                            WinFormsServ.Error(Ab.FIO + " - совпадения для " + Ab.LicenseProgramCode + " " + Ab.LicenseProgramName + " " + Ab.ObrazProgramName);
                             continue;
                         }
                         if (AbitB.Count() == 0)
@@ -350,7 +367,7 @@ where ed.extentryview.studyformid=1 and ed.extentryview.studybasisid=1 and ed.ex
                         var Mrks = AbitB.First().Mark;
                         if (Mrks.Count() == 0)
                         {
-                            WinFormsServ.Error(Ab.Person.Surname + " " + (Ab.Person.Name ?? "") + " " + (Ab.Person.SecondName ?? "") + " - нет оценок для " + Ab.Entry.SP_LicenseProgram.Code + " " + Ab.Entry.SP_LicenseProgram.Name + " " + Ab.Entry.SP_ObrazProgram.Name);
+                            WinFormsServ.Error(Ab.FIO + " - нет оценок для " + Ab.LicenseProgramCode + " " + Ab.LicenseProgramName + " " + Ab.ObrazProgramName);
                             continue;
                         }
                         foreach (var M in Mrks)
@@ -358,7 +375,7 @@ where ed.extentryview.studyformid=1 and ed.extentryview.studybasisid=1 and ed.ex
                             Guid? exInEnt = context.extExamInEntry.Where(x => x.EntryId == Ab.EntryId && x.ExamId == M.ExamInEntryBlockUnit.ExamId).Select(x => x.Id).FirstOrDefault();
                             if (!exInEnt.HasValue)
                             {
-                                WinFormsServ.Error(Ab.Person.Surname + " " + (Ab.Person.Name ?? "") + " " + (Ab.Person.SecondName ?? "") + " - нет экзамена <" + M.ExamInEntryBlockUnit.Exam.ExamName.Name + "> для " + Ab.Entry.SP_LicenseProgram.Code + " " + Ab.Entry.SP_LicenseProgram.Name + " " + Ab.Entry.SP_ObrazProgram.Name);
+                                WinFormsServ.Error(Ab.FIO + " - нет экзамена <" + M.ExamInEntryBlockUnit.Exam.ExamName.Name + "> для " + Ab.LicenseProgramCode + " " + Ab.LicenseProgramName + " " + Ab.ObrazProgramName);
                                 continue;
                             }
                             if (context.Mark.Where(x => x.AbiturientId == Ab.Id && x.ExamInEntryBlockUnitId == exInEnt).Count() == 0)
@@ -377,51 +394,5 @@ where ed.extentryview.studyformid=1 and ed.extentryview.studybasisid=1 and ed.ex
                 MessageBox.Show("Перезачтено оценок - " + cnt);
             }
         }
-
-        //public static void ImportLoginsFromCSV()
-        //{
-        //    OpenFileDialog ofd = new OpenFileDialog();
-        //    if (ofd.ShowDialog() == DialogResult.OK)
-        //    {
-        //        try
-        //        {
-        //            using (StreamReader sr = new StreamReader(ofd.FileName, Encoding.GetEncoding(1251)))
-        //            using (PriemEntities context = new PriemEntities())
-        //            {
-        //                while (!sr.EndOfStream)
-        //                {
-        //                    string str = sr.ReadLine();
-        //                    string[] splitted = str.Split(';');
-        //                    if (splitted.Count() < 7)
-        //                        continue;
-
-        //                    string displayName = splitted[4];
-        //                    string birthdate = splitted[3];
-        //                    DateTime bDate = DateTime.Now;
-        //                    if (!DateTime.TryParse(birthdate, out bDate))
-        //                        continue;
-        //                    string account = splitted[5];
-
-        //                    Guid? AbiturientId =
-        //                        (from extPers in context.extPersonAll
-        //                         join Abit in context.Abiturient on extPers.Id equals Abit.PersonId
-        //                         join extEnt in context.extEntryView on Abit.Id equals extEnt.AbiturientId
-        //                         join Ad in context.ADUserData on Abit.Id equals Ad.AbiturientId
-        //                         where extPers.FIO == displayName && extPers.BirthDate == bDate
-        //                         select Abit.Id).FirstOrDefault();
-
-        //                    if (!AbiturientId.HasValue || AbiturientId.Value == Guid.Empty)
-        //                        continue;
-
-        //                    context.ADUserData_Update(AbiturientId, account + "@spbu.ru", account, "", true);
-        //                }
-        //            }
-        //        }
-        //        catch (Exception ex)
-        //        {
-        //            WinFormsServ.Error(ex);
-        //        }
-        //    }
-        //}
     }
 }

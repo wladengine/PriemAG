@@ -31,8 +31,8 @@ namespace Priem
                                   select ab.PersonId).FirstOrDefault();
 
                     var abitList = (from x in context.Abiturient
-                                    join Entry in context.Entry on x.EntryId equals Entry.Id
-                                    where Entry.StudyLevel.StudyLevelGroup.Id == 4
+                                    join Entry in context.extEntry on x.EntryId equals Entry.Id
+                                    where Entry.StudyLevelGroupId == 4
                                     && x.PersonId == PersonId
                                     && x.BackDoc == false
                                     select new
@@ -40,20 +40,20 @@ namespace Priem
                                         x.Id,
                                         x.PersonId,
                                         x.Barcode,
-                                        Faculty = Entry.SP_Faculty.Name,
-                                        Profession = Entry.SP_LicenseProgram.Name,
-                                        ProfessionCode = Entry.SP_LicenseProgram.Code,
-                                        ObrazProgram = Entry.StudyLevel.Acronym + "." + Entry.SP_ObrazProgram.Number + "." + MainClass.sPriemYear + " " + Entry.SP_ObrazProgram.Name,
-                                        Specialization = Entry.SP_Profile.Name,
+                                        Faculty = Entry.FacultyName,
+                                        Profession = Entry.LicenseProgramName,
+                                        ProfessionCode = Entry.LicenseProgramCode,
+                                        ObrazProgram = Entry.ObrazProgramCrypt + " " + Entry.ObrazProgramName,
+                                        Specialization = Entry.ProfileName,
                                         Entry.StudyFormId,
-                                        Entry.StudyForm.Name,
+                                        Entry.StudyFormName,
                                         Entry.StudyBasisId,
                                         EntryType = (Entry.StudyLevelId == 17 ? 2 : 1),
                                         Entry.StudyLevelId,
                                         x.Priority,
                                         x.Entry.IsForeign,
-                                        Entry.CommissionId,
-                                        ComissionAddress = Entry.CommissionId
+                                        //Entry.CommissionId,
+                                        //ComissionAddress = Entry.CommissionId
                                     }).OrderBy(x => x.Priority).ToList();
 
                     var person = (from x in context.Person
@@ -987,9 +987,9 @@ namespace Priem
 
                         string ObrazProgramId = v.ObrazProgramId.ToString();
                         string obProg = v.ObrazProgram;
-                        string obProgCode = (from entry in ctx.Entry
+                        string obProgCode = (from entry in ctx.extEntry
                                              where entry.ObrazProgramId == v.ObrazProgramId
-                                             select entry.StudyLevel.Acronym + "." + entry.SP_ObrazProgram.Number + "." + MainClass.sPriemYear).FirstOrDefault();
+                                             select entry.ObrazProgramCrypt).FirstOrDefault();
 
                         if (ObrazProgramId != curObProg)
                         {

@@ -70,7 +70,6 @@
             this.chbWithOlymps = new System.Windows.Forms.CheckBox();
             this.cbStudyLevelGroup = new System.Windows.Forms.ComboBox();
             this.lbls = new System.Windows.Forms.Label();
-            this.chbIsCrimea = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.dgvAbits)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.gbPasha.SuspendLayout();
@@ -519,22 +518,11 @@
             this.lbls.TabIndex = 139;
             this.lbls.Text = "Уровень";
             // 
-            // chbIsCrimea
-            // 
-            this.chbIsCrimea.AutoSize = true;
-            this.chbIsCrimea.Location = new System.Drawing.Point(128, 311);
-            this.chbIsCrimea.Name = "chbIsCrimea";
-            this.chbIsCrimea.Size = new System.Drawing.Size(55, 17);
-            this.chbIsCrimea.TabIndex = 141;
-            this.chbIsCrimea.Text = "Крым";
-            this.chbIsCrimea.UseVisualStyleBackColor = true;
-            // 
             // RatingList
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(848, 633);
-            this.Controls.Add(this.chbIsCrimea);
             this.Controls.Add(this.cbStudyLevelGroup);
             this.Controls.Add(this.lbls);
             this.Controls.Add(this.chbWithOlymps);
@@ -604,7 +592,6 @@
             this.Controls.SetChildIndex(this.lblCount, 0);
             this.Controls.SetChildIndex(this.lbls, 0);
             this.Controls.SetChildIndex(this.cbStudyLevelGroup, 0);
-            this.Controls.SetChildIndex(this.chbIsCrimea, 0);
             ((System.ComponentModel.ISupportInitialize)(this.dgvAbits)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.gbPasha.ResumeLayout(false);
@@ -653,6 +640,5 @@
         private System.Windows.Forms.CheckBox chbWithOlymps;
         private System.Windows.Forms.ComboBox cbStudyLevelGroup;
         private System.Windows.Forms.Label lbls;
-        private System.Windows.Forms.CheckBox chbIsCrimea;
     }
 }

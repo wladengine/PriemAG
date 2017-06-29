@@ -172,11 +172,6 @@ namespace Priem
             get { return chbCel.Checked; }
             set { chbCel.Checked = value; }
         }
-        public bool IsCrimea
-        {
-            get { return chbIsCrimea.Checked; }
-            set { chbIsCrimea.Checked = value; }
-        }
         public bool IsForeign
         {
             get { return MainClass.dbType == PriemType.PriemForeigners; }
@@ -197,7 +192,6 @@ namespace Priem
                                        && (ProfileId == null ? ent.ProfileId == 0 : ent.ProfileId == ProfileId)
                                        && ent.StudyFormId == StudyFormId
                                        && ent.StudyBasisId == StudyBasisId
-                                       && ent.IsCrimea == IsCrimea
                                        && ent.IsForeign == IsForeign
                                        select ent.Id).FirstOrDefault();
                         return entId;
@@ -379,7 +373,6 @@ namespace Priem
                        && (ProfileId == null ? ent.ProfileId == 0 : ent.ProfileId == ProfileId)
                        && ent.StudyFormId == StudyFormId
                        && ent.StudyBasisId == StudyBasisId
-                       && ent.IsCrimea == IsCrimea
                        && ent.IsForeign == IsForeign
                        select ent).FirstOrDefault();
 
@@ -424,7 +417,6 @@ namespace Priem
                                     && fv.StudyFormId == StudyFormId
                                     && fv.StudyBasisId == StudyBasisId
                                     && fv.IsCel == IsCel
-                                    && fv.IsCrimea == IsCrimea
                                     select fv).FirstOrDefault();
             
             string DocNum = string.Empty;
@@ -594,7 +586,6 @@ namespace Priem
             s += " AND qAbiturient.IsSecond = " + (IsSecond ? " 1 " : " 0 ");
             s += " AND qAbiturient.IsReduced = " + (IsReduced ? " 1 " : " 0 ");
             s += " AND qAbiturient.IsParallel = " + (IsParallel ? " 1 " : " 0 ");
-            s += " AND qAbiturient.IsCrimea = " + (IsCrimea ? " 1 " : " 0 ");
             s += " AND qAbiturient.IsForeign = " + (IsForeign ? " 1 " : " 0 ");
 
             return s;
@@ -709,7 +700,7 @@ namespace Priem
             SaveFileDialog sfd = new SaveFileDialog();
             sfd.Filter = "ADOBE Pdf files|*.pdf";
             if (sfd.ShowDialog() == DialogResult.OK)
-                PriemLib.Print.PrintRatingProtocol(StudyFormId, StudyBasisId, FacultyId, LicenseProgramId, ObrazProgramId,ProfileId, IsCel, false,
+                PriemLib.Print.PrintRatingProtocol(StudyFormId, StudyBasisId, FacultyId, LicenseProgramId, ObrazProgramId,ProfileId, IsCel,
                     plan, sfd.FileName, IsSecond, IsReduced, IsParallel, false);
         }        
 
@@ -820,15 +811,15 @@ namespace Priem
             LockUnlock(true);
         }
 
-        private void LockUnlock(bool locked)
+        private void LockUnlock(bool _locked)
         {
             try
             {
                 using (PriemEntities context = new PriemEntities())
                 {
-                    context.FixierenView_UpdateLocked(StudyLevelGroupId, FacultyId, LicenseProgramId, ObrazProgramId, ProfileId, StudyBasisId, StudyFormId, IsSecond, IsReduced, IsParallel, IsCel, IsCrimea, locked);
+                    context.FixierenView_UpdateLocked(StudyLevelGroupId, FacultyId, LicenseProgramId, ObrazProgramId, ProfileId, StudyBasisId, StudyFormId, IsSecond, IsReduced, IsParallel, IsCel, isCrimea: false, locked: _locked);
                     
-                    lblLocked.Text = locked ? "ЗАЛОЧЕНА" : "НЕ залочена";
+                    lblLocked.Text = _locked ? "ЗАЛОЧЕНА" : "НЕ залочена";
                 }
             }
             catch (Exception ex)
@@ -865,7 +856,6 @@ namespace Priem
                              && fv.StudyFormId == StudyFormId
                              && fv.StudyBasisId == StudyBasisId
                              && fv.IsCel == IsCel
-                             && fv.IsCrimea == IsCrimea
                              select fv.Id).FirstOrDefault();
 
                         Guid? entryId =
@@ -876,12 +866,11 @@ namespace Priem
                              && (ProfileId == null ? true : fv.ProfileId == ProfileId)
                              && fv.StudyFormId == StudyFormId
                              && fv.StudyBasisId == StudyBasisId
-                             && fv.IsCrimea == IsCrimea
                              && fv.IsForeign == IsForeign
                              select fv.Id).FirstOrDefault();
                         
                         //удалили старое
-                        context.FirstWave_DELETE(entryId, IsCel, IsCrimea, false);
+                        context.FirstWave_DELETE(entryId, IsCel, false, false);
 
                         var fix = from fx in context.Fixieren
                                   where fx.FixierenViewId == fixViewId
@@ -928,7 +917,7 @@ namespace Priem
                                      select fv.Id).FirstOrDefault();
                     
                     //удалили
-                    context.FirstWave_DELETE(entryId, IsCel, IsCrimea, false);
+                    context.FirstWave_DELETE(entryId, IsCel, false, false);
                 }
             }
             catch (Exception ex)
