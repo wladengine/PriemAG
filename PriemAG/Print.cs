@@ -626,8 +626,6 @@ namespace Priem
                                        join competition in ctx.Competition on extabit.CompetitionId equals competition.Id
                                        join entryHeader in ctx.EntryHeader on extentryView.EntryHeaderId equals entryHeader.Id into entryHeader2
                                        from entryHeader in entryHeader2.DefaultIfEmpty()
-                                       join extabitMarksSum in ctx.extAbitMarksSum on extabit.Id equals extabitMarksSum.Id into extabitMarksSum2
-                                       from extabitMarksSum in extabitMarksSum2.DefaultIfEmpty()
                                        where extentryView.Id == protId
                                        orderby extabit.ObrazProgramName, extabit.ProfileName, entryHeader.Id, extperson.FIO
                                        select new
@@ -635,7 +633,7 @@ namespace Priem
                                            Id = extabit.Id,
                                            Рег_Номер = extabit.RegNum,
                                            Ид_номер = extperson.PersonNum,
-                                           TotalSum = extabitMarksSum.TotalSum,
+                                           TotalSum = extabit.Sum,
                                            ФИО = extperson.FIO,
                                            LicenseProgramName = extabit.LicenseProgramName,
                                            LicenseProgramCode = extabit.LicenseProgramCode,
@@ -894,8 +892,6 @@ namespace Priem
                                join extperson in ctx.extPersonAll on extabit.PersonId equals extperson.Id
                                join country in ctx.Country on extperson.NationalityId equals country.Id
                                join competition in ctx.Competition on extabit.CompetitionId equals competition.Id
-                               join extabitMarksSum in ctx.extAbitMarksSum on extabit.Id equals extabitMarksSum.Id into extabitMarksSum2
-                               from extabitMarksSum in extabitMarksSum2.DefaultIfEmpty()
                                join entryHeader in ctx.EntryHeader on extentryView.EntryHeaderId equals entryHeader.Id into entryHeader2
                                from entryHeader in entryHeader2.DefaultIfEmpty()
                                join celCompetition in ctx.CelCompetition on extabit.CelCompetitionId equals celCompetition.Id into celCompetition2
@@ -908,7 +904,7 @@ namespace Priem
                                    extperson.Sex,
                                    Рег_Номер = extabit.RegNum,
                                    Ид_номер = extabit.PersonNum,
-                                   TotalSum = (extabit.CompetitionId == 8 || extabit.CompetitionId == 1) ? null : extabitMarksSum.TotalSumFiveGrade,
+                                   TotalSum = (extabit.CompetitionId == 8 || extabit.CompetitionId == 1) ? null : extabit.Sum,
                                    ФИО = extabit.FIO,
                                    CelCompName = celCompetition.TvorName,
                                    LicenseProgramName = extabit.LicenseProgramName,
