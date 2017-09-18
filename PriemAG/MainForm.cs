@@ -744,7 +744,7 @@ namespace Priem
 
         private void smiEntryView_Click(object sender, EventArgs e)
         {
-            new EntryViewList().Show();
+            new EntryViewList(Print.PrintOrder).Show();
         }
 
         private void smiDisEntryView_Click(object sender, EventArgs e)

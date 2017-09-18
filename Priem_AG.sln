@@ -1,6 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 15
+VisualStudioVersion = 15.0.26430.15
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BaseFormsLib", "..\BaseFormsLib\BaseFormsLib\BaseFormsLib.csproj", "{264EF71D-FE21-4BE1-B7EB-CCF3B5FD219F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PriemLib", "..\..\2013\PriemLib\PriemLib\PriemLib.csproj", "{957A6E48-2CF1-4360-BBE5-D27246BC2093}"
@@ -8,8 +10,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EducServLib", "..\..\EDUCATION\EducServLib\EducServLib\EducServLib.csproj", "{96257583-5FF8-4F63-AED3-96C36DF6477D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BDClassLib", "..\..\GRADUATE\BDClassLib\BDClassLib\BDClassLib.csproj", "{0880AD34-06A6-4825-A4B7-55AC3E69CCDA}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WordOut", "..\..\2013\_SHARED LIBS\WordOut\WordOut.csproj", "{C54799A9-232C-45B2-BE94-B63F514CA52A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Priem", "PriemAG\Priem.csproj", "{22507CF6-6DA4-4653-A175-D69DBA162711}"
 EndProject
@@ -63,16 +63,6 @@ Global
 		{0880AD34-06A6-4825-A4B7-55AC3E69CCDA}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{0880AD34-06A6-4825-A4B7-55AC3E69CCDA}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{0880AD34-06A6-4825-A4B7-55AC3E69CCDA}.Release|x86.ActiveCfg = Release|Any CPU
-		{C54799A9-232C-45B2-BE94-B63F514CA52A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C54799A9-232C-45B2-BE94-B63F514CA52A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C54799A9-232C-45B2-BE94-B63F514CA52A}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{C54799A9-232C-45B2-BE94-B63F514CA52A}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{C54799A9-232C-45B2-BE94-B63F514CA52A}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{C54799A9-232C-45B2-BE94-B63F514CA52A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C54799A9-232C-45B2-BE94-B63F514CA52A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C54799A9-232C-45B2-BE94-B63F514CA52A}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{C54799A9-232C-45B2-BE94-B63F514CA52A}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{C54799A9-232C-45B2-BE94-B63F514CA52A}.Release|x86.ActiveCfg = Release|Any CPU
 		{22507CF6-6DA4-4653-A175-D69DBA162711}.Debug|Any CPU.ActiveCfg = Debug|x86
 		{22507CF6-6DA4-4653-A175-D69DBA162711}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
 		{22507CF6-6DA4-4653-A175-D69DBA162711}.Debug|Mixed Platforms.Build.0 = Debug|x86
@@ -86,6 +76,16 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 1
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = https://vchikhira.visualstudio.com/
+		SccProjectUniqueName0 = ..\\..\\EDUCATION\\EducServLib\\EducServLib\\EducServLib.csproj
+		SccProjectName0 = $/Education2012/EducServLib/EducServLib
+		SccAuxPath0 = https://vchikhira.visualstudio.com
+		SccLocalPath0 = ..\\..\\EDUCATION\\EducServLib\\EducServLib
+		SccProvider0 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 	EndGlobalSection
 	GlobalSection(SubversionScc) = preSolution
 		Svn-Managed = True
